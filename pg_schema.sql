@@ -12,6 +12,7 @@ CREATE INDEX websources_timecheck ON websources(last_checked_ts);
 -- Normalised form violation – I'll try to make it worthwhile
 CREATE TABLE link_queue(id BIGSERIAL PRIMARY KEY,last_indexed_ts INTEGER,added_ts INTEGER,link TEXT,claimant_id INTEGER, claim_ts INTEGER,FOREIGN KEY(link) REFERENCES websources(link), FOREIGN KEY(claimant_id) REFERENCES spyders(id));
 --
+CREATE UNIQUE INDEX link_queue_link_uniqueness ON link_queue(link);
 CREATE INDEX link_queue_added_ts ON link_queue(added_ts);
 CREATE PARTIAL INDEX link_queue_claims ON link_queue WHERE claimant_id != null; -- Fix this and figure out queries. Also check if it's possible to use the foreign key constraint with a mostly null column, and if so then check if the partial index can be used. 
 CREATE PARTIAL INDEX link_queue_claim_ts ON link_queue WHERE claim_ts != null;
